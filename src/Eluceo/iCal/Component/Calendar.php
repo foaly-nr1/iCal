@@ -31,6 +31,7 @@ class Calendar extends Component
     protected $method = null;
     protected $name = null;
     protected $timezone = null;
+    protected $ttl = null;
 
     public function __construct($prodId)
     {
@@ -67,6 +68,12 @@ class Calendar extends Component
         return $this;
     }
 
+    public function setTTL($interval)
+    {
+        $this->ttl = $interval;
+        return $this;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -87,6 +94,11 @@ class Calendar extends Component
         if ($this->timezone) {
             $this->properties->set('X-WR-TIMEZONE', $this->timezone);
             $this->addComponent(new Timezone($this->timezone));
+        }
+
+        if($this->ttl) {
+            $this->properties->set('X-PUBLISHED-TTL', $this->ttl);
+            $this->properties->set('REFRESH-INTERVAL;VALUE=DURATION', $this->ttl);
         }
     }
 
